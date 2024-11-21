@@ -1,0 +1,20 @@
+  #run a python quiz program
+def register():
+    names=[]
+    usernames=[]
+    passwords=[]
+    names.append(input("Enter your name:"))
+    usernames.append(input("enter your username:"))
+    passwords.append(input("enter your password:"))
+    return usernames
+def login(usernames,passwords):
+    usernames=[]
+    passwords=[]
+    password=""
+    username=""
+    username=input("enter your username:")
+    password=input("enter your Password:")
+    if password==passwords[usernames.index(username)]:
+       print("you have logged in to the quiz")
+    else:
+       print("incorrect!")
