@@ -1,0 +1,142 @@
+import random
+
+USER_DATA_FILE = "users.txt"
+
+QUIZ_QUESTIONS = {
+    "python": [
+        {"question": "What is the output of print(2**3)?", "options": ["6", "8", "9"], "answer": "8"},
+        {"question": "Which keyword is used for function in Python?", "options": ["func", "define", "def"],
+         "answer": "def"},
+        {"question": "What is the correct way to declare a variable?",
+         "options": ["int x = 10", "x = 10", "var x = 10"],
+         "answer": "x = 10"},
+        {"question": "Who developed Python Programming Language?",
+         "options": ["Wick van Rossum", "Rasmus Lerdorf", "Guido van Rossum"],
+         "answer": "Guido van Rossum"},
+        {"question": "Which of the following is the correct extension of the Python file?",
+         "options": [" .python", ".py", ".p"], "answer": ".py"},
+        {"question": "Is Python code compiled or interpreted?",
+         "options": ["Python code is both compiled and interpreted", "Python code is neither compiled nor interpreted",
+                     "Python code is only compiled"], "answer": "Python code is both compiled and interpreted"},
+        {"question": "All keywords in Python are in ___", "options": ["Capitalized", "UPPER CASE", "none"],
+         "answer": "none"},
+        {"question": "What will be the value of the following Python expression?""\n 4 + 3 % 5",
+         "options": ["7", "8", "9"], "answer": "7"},
+    ],
+
+    "c++": [
+        {"question": "what is the correct syntax to output "hello word" in cpp?","options":["cout<<hello world",print("hello world",consol.writeLine("hello world"));]
+"answer:"print("hello world")},
+        {"question":"who invented cpp?","options":[dennis ritchie",bjarne stroustrup","ken thompson"],"answer":"bjarne stroustrup"}
+        {"question":"which extension is used for user defined header file?","options":["hg","cpp","h","hf"],"answer":"h"}
+        {"question":"whic is the correct identifier in cpp?","options":["VAR_1234","$var_name"],"answer:"VAR_1234"},
+        {"question:"which approach is used by cpp?":"options":["left-right","right-left","bottom up","top-down"],"answer":"bottom-up"}
+        {"which of the following is provided by cpp?""options":["double","float","int","bool"],"answer":"bool"}
+    
+    ],
+    "PHP": [
+
+{"question":"is PHP whitespace sensitive?":"options":["yes","no"],"answer":"no"}
+{"question":"which function creates an array":"options":["array()","array_chunk()"],"answer":"array()"}
+{"question":"which of the following is used to destroy sessions?":"options":["session_start(function)","isset()function","session_destroy()function"],"answer":"session_destroy()function"}
+
+    ]
+}
+def register_user():
+    username = input("Enter a new username: ")
+    password = input("Enter a new password: ")
+
+    if check_user_exists(username):
+        print("Username already exists! Try logging in.")
+        return False
+
+    with open(USER_DATA_FILE, "a") as file:
+        file.write(f"{username},{password}\n")
+
+    print("Registration successful!")
+    return True
+def check_user_exists(username):
+    try:
+        with open(USER_DATA_FILE, "r") as file:
+            for line in file:
+                stored_username, _ = line.strip().split(",")
+                if stored_username == username:
+                    return True
+    except FileNotFoundError:
+        return False
+    return False
+def login_user():
+    username = input("Enter your username: ")
+    password = input("Enter your password: ")
+
+    if not check_user_exists(username):
+        print("Username not found! Please register.")
+        return False
+
+    with open(USER_DATA_FILE, "r") as file:
+        for line in file:
+            stored_username, stored_password = line.strip().split(",")
+            if stored_username == username and stored_password == password:
+                print("Login successful!")
+                return True
+    print("Invalid username or password!")
+    return False
+def start_quiz(topic):
+    questions = QUIZ_QUESTIONS[topic]
+    random.shuffle(questions)
+    score = 0
+
+    for i in range(5):
+        question = questions[i]
+        print(f"\nQ{i + 1}. {question['question']}")
+        for idx, option in enumerate(question['options'], 1):
+            print(f"{idx}. {option}")
+
+        user_answer = int(input("Enter your answer (1/2/3): "))
+        if user_answer == question['answer']:
+            print("Correct!")
+            score += 1
+        else:
+            print("Wrong answer.")
+
+    print(f"\nYour score: {score}/5")
+def main_menu():
+    while True:
+        print("\n1. Register")
+        print("2. Login")
+        print("3. Exit")
+        choice = input("Enter your choice: ")
+
+        if choice == '1':
+            register_user()
+        elif choice == '2':
+            if login_user():
+                quiz_menu()
+        elif choice == '3':
+            print("Exiting the program.")
+            break
+        else:
+            print("Invalid choice, please try again.")
+def quiz_menu():
+    while True:
+        print("\nSelect a quiz topic:")
+        print("1. Python")
+        print("2. C++")
+        print("3. PHP")
+        print("4. Logout")
+        choice = input("Enter your choice: ")
+
+        if choice == '1':
+            start_quiz("python")
+        elif choice == '2':
+            start_quiz("C++")
+        elif choice == '3':
+            start_quiz("PHP")
+        elif choice == '4':
+            print("Logging out.")
+            break
+        else:
+            print("Invalid choice, please try again.")
+
+if _name_ == "_main_":
+    main_menu()
